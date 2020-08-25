@@ -1,10 +1,19 @@
 <template>
-  <q-page :class="ready ? 'flex flex-center bg-white' : 'flex flex-center'">
+  <q-page :class="ready ? 'bg-white' : 'flex flex-center transparent'">
     <div v-if="ready">
       {{imageURI}}
     </div>
-    <div>
+    <q-separator/>
+    <div v-if="ready">
       <button v-if="authorized" class="secondary push" @click="goScan()">Go Scan</button>
+    </div>
+    <q-separator/>
+    <div v-if="!ready" class="container">
+      <q-img
+        :src="rect"
+      />
+      <q-separator/>
+      <q-btn color="primary" label="Cancel" @click="cancelScan()"/>
     </div>
   </q-page>
 </template>
@@ -19,6 +28,7 @@ export default {
     return {
       ready: true,
       imageURI: '',
+      rect: 'statics/rect.png',
       authorized: false,
       selection: 'standard',
       selectOptions: [
@@ -76,6 +86,7 @@ export default {
     cancelScan () {
       window.QRScanner.cancelScan()
       this.authorized = true
+      this.ready = true
     },
     openSettings () {
       if (status.canOpenSettings) {
@@ -87,3 +98,9 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  .container {
+    flex:1;
+    align-items: 'center'
+  }
+</style>
